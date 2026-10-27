@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0A0E1A" />
+<meta name="description" content="FORMULA SMAN 1 Mojosari — Portal Absensi Digital. Login anggota atau akses admin." />
+<meta name="color-scheme" content="dark" />
+<title>Portal Login — FORMULA SMAN 1 Mojosari</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231A73E8'/%3E%3Ctext x='50' y='70' font-family='Arial' font-size='58' font-weight='bold' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --color-primary: #1A73E8;
+  --color-primary-dark: #1557B0;
+  --color-primary-light: #E8F0FE;
+  --color-secondary: #34A853;
+  --color-accent: #EA4335;
+  --color-warning: #FBBC04;
+  --color-info: #4DA3FF;
+
+  --bg-base: #050810;
+  --bg-mid: #0F1729;
+
+  --text-primary: #202124;
+  --text-secondary: #525252;
+  --text-muted: #737373;
+  --text-on-dark: rgba(230, 237, 243, 0.88);
+  --text-on-dark-dim: rgba(230, 237, 243, 0.35);
+
+  --border-soft: rgba(255, 255, 255, 0.08);
+
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-on-dark);
+  background: var(--bg-base);
+  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+::selection { background: var(--color-primary); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at top, var(--bg-mid) 0%, var(--bg-base) 60%, #000 100%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(26, 115, 232, 0.18), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(52, 168, 83, 0.12), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(124, 77, 255, 0.10), transparent 50%);
+  animation: bgShift 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes bgShift {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  33%      { transform: translate(3%, -2%) rotate(2deg); }
+  66%      { transform: translate(-3%, 2%) rotate(-2deg); }
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(26, 115, 232, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 115, 232, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+          mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  animation: gridScroll 30s linear infinite;
+}
+
+@keyframes gridScroll {
+  from { background-position: 0 0; }
+  to   { background-position: 40px 40px; }
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, #1A73E8, transparent 70%); top: 5%; left: -100px; opacity: 0.4; animation: float1 20s ease-in-out infinite; }
+.orb-2 { width: 320px; height: 320px; background: radial-gradient(circle, #34A853, transparent 70%); bottom: 5%; right: -80px; opacity: 0.3; animation: float2 24s ease-in-out infinite; }
+.orb-3 { width: 260px; height: 260px; background: radial-gradient(circle, #7C4DFF, transparent 70%); top: 50%; left: 45%; opacity: 0.25; animation: float3 28s ease-in-out infinite; }
+
+@keyframes float1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(80px, 50px) scale(1.15); } }
+@keyframes float2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-60px, -40px) scale(1.1); } }
+@keyframes float3 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-40px, 60px) scale(1.2); } }
+
+.scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(26, 115, 232, 0.06) 50%, transparent 100%);
+  background-size: 100% 8px;
+  pointer-events: none;
+  opacity: 0.5;
+  animation: scanMove 8s linear infinite;
+}
+
+@keyframes scanMove {
+  from { background-position: 0 -100vh; }
+  to   { background-position: 0 100vh; }
+}
+
+/* ============================================================
+   STAGE 1 — LOADER
+   ============================================================ */
+.loader {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  padding: 40px 24px;
+  color: #C9D1E0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+.loader.hide {
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+}
+
+.term-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.term-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.term-dot.red    { background: #FF5F56; }
+.term-dot.yellow { background: #FFBD2E; }
+.term-dot.green  { background: #27C93F; }
+
+.term-title {
+  margin-left: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logs {
+  min-height: 200px;
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logs::-webkit-scrollbar { display: none; }
+
+.log-line {
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transform: translateX(-8px);
+  animation: logIn 0.28s var(--ease-out) forwards;
+  word-break: break-word;
+}
+
+@keyframes logIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.log-time {
+  color: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.log-mark {
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.log-mark.ok   { color: #27C93F; }
+.log-mark.info { color: var(--color-info); }
+.log-mark.warn { color: #FFBD2E; }
+.log-mark.dim  { color: rgba(255, 255, 255, 0.28); }
+
+.log-text { color: rgba(230, 237, 243, 0.85); }
+.log-text .accent { color: var(--color-info); }
+.log-text .green  { color: #27C93F; }
+.log-text .dim    { color: rgba(255, 255, 255, 0.35); }
+
+.progress-wrap {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  gap: 12px;
+}
+
+.progress-pct {
+  color: var(--color-info);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #1A73E8, var(--color-info), #34A853);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  transition: width 0.25s var(--ease-out);
+  animation: gradientShift 2s linear infinite;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.skip-hint {
+  position: fixed;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+  text-align: center;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.skip-hint kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  margin: 0 2px;
+}
+
+/* ============================================================
+   STAGE 2 — LOGIN
+   ============================================================ */
+.login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.94);
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  text-align: center;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s var(--ease-spring), transform 0.8s var(--ease-spring);
+}
+
+.login.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+
+.logo-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 32px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: var(--radius-lg);
+}
+
+.logo-wrap::before,
+.logo-wrap::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(77, 163, 255, 0.25);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.logo-wrap::before {
+  width: 150px;
+  height: 150px;
+  animation: rotate 20s linear infinite;
+}
+
+.logo-wrap::after {
+  width: 190px;
+  height: 190px;
+  border-color: rgba(52, 168, 83, 0.18);
+  animation: rotate 30s linear infinite reverse;
+}
+
+@keyframes rotate {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.logo-mark {
+  width: 108px;
+  height: 108px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #1A73E8 0%, #4285F4 50%, #34A853 130%);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 54px;
+  letter-spacing: -0.04em;
+  box-shadow:
+    0 20px 60px rgba(26, 115, 232, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 0 0 8px rgba(26, 115, 232, 0.08);
+  transition: transform 0.15s var(--ease-spring), box-shadow 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-wrap:hover .logo-mark {
+  transform: translateY(-2px);
+  box-shadow:
+    0 24px 68px rgba(26, 115, 232, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 0 0 8px rgba(26, 115, 232, 0.1);
+}
+
+.logo-wrap:active .logo-mark { transform: scale(0.94); }
+
+.logo-wrap .ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  border: 2px solid rgba(77, 163, 255, 0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logo-wrap .ping.pulse {
+  animation: pingOut 0.7s var(--ease-out);
+}
+
+@keyframes pingOut {
+  0%   { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.6); }
+}
+
+.login h1 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.login p.sub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btn-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 24px;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #1A73E8, #4285F4);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 8px 24px rgba(26, 115, 232, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  transition: transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out), background 0.22s;
+  position: relative;
+  overflow: hidden;
+  min-height: 52px;
+  width: 100%;
+}
+
+.btn-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1557B0, #1A73E8);
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+
+.btn-main > * { position: relative; z-index: 1; }
+.btn-main:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(26, 115, 232, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+.btn-main:hover:not(:disabled)::before { opacity: 1; }
+.btn-main:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.btn-main:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-main svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: color 0.3s;
+  min-height: 20px;
+}
+
+.hint.active { color: var(--color-info); font-weight: 600; }
+.hint svg { width: 14px; height: 14px; flex-shrink: 0; }
+.hint span { display: inline; }
+
+.dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+  min-height: 8px;
+}
+
+.dots .d {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.2s var(--ease-out);
+}
+
+.dots .d.on {
+  background: var(--color-info);
+  box-shadow: 0 0 8px rgba(77, 163, 255, 0.8);
+  transform: scale(1.3);
+}
+
+/* ============================================================
+   REDIRECT OVERLAY
+   ============================================================ */
+.redirect-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.redirect-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.redirect-inner {
+  text-align: center;
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 24px;
+  max-width: 90vw;
+}
+
+.redirect-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 20px;
+  border: 3px solid rgba(77, 163, 255, 0.2);
+  border-top-color: var(--color-info);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.redirect-text {
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+}
+
+.redirect-target {
+  color: var(--color-info);
+  font-weight: 700;
+  margin-top: 6px;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+/* ============================================================
+   WATERMARK
+   ============================================================ */
+.watermark {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.watermark .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  box-shadow: 0 0 8px rgba(52, 168, 83, 0.8);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .loader { font-size: 12px; padding: 24px 18px; }
+  .logs { max-height: 200px; }
+  .logo-mark { width: 92px; height: 92px; font-size: 46px; border-radius: 24px; }
+  .logo-wrap::before { width: 130px; height: 130px; }
+  .logo-wrap::after { width: 165px; height: 165px; }
+  .login h1 { font-size: 21px; }
+  .login p.sub { margin-bottom: 28px; }
+  .skip-hint { display: none; }
+}
+
+@media (max-height: 600px) {
+  .logo-wrap { margin-bottom: 20px; }
+  .logo-mark { width: 80px; height: 80px; font-size: 40px; border-radius: 22px; }
+  .logo-wrap::before { width: 115px; height: 115px; }
+  .logo-wrap::after { width: 145px; height: 145px; }
+  .login p.sub { margin-bottom: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .loader, .login { transition: opacity 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg" aria-hidden="true">
+  <div class="grid"></div>
+  <div class="scanline"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- ============================= STAGE 1: LOADER ============================= -->
+<div class="loader" id="loader" role="status" aria-live="polite" aria-label="Memuat sistem portal">
+  <div class="term-head">
+    <span class="term-dot red"></span>
+    <span class="term-dot yellow"></span>
+    <span class="term-dot green"></span>
+    <span class="term-title">formula-portal — v2.1.0</span>
+  </div>
+
+  <div class="logs" id="logs"></div>
+
+  <div class="progress-wrap">
+    <div class="progress-head">
+      <span id="progressLabel">Menyiapkan sistem...</span>
+      <span class="progress-pct" id="progressPct" aria-hidden="true">0%</span>
+    </div>
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressRole">
+      <span id="progressBar"></span>
+    </div>
+  </div>
+</div>
+
+<div class="skip-hint" id="skipHint" aria-hidden="true">
+  Tekan <kbd>Enter</kbd> atau klik untuk lewati
+</div>
+
+<!-- ============================= STAGE 2: LOGIN ============================= -->
+<div class="login" id="login" aria-hidden="true">
+  <div class="logo-wrap" id="logoWrap" role="button" tabindex="0" aria-label="Logo FORMULA — ketuk 5 kali untuk akses admin">
+    <div class="ping" id="ping" aria-hidden="true"></div>
+    <div class="logo-mark" aria-hidden="true">F</div>
+  </div>
+
+  <h1>FORMULA SMAN 1 Mojosari</h1>
+  <p class="sub">Portal Absensi Digital<br>Informatika &amp; Multimedia</p>
+
+  <div class="actions">
+    <button class="btn-main" id="btnUser" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Login Anggota</span>
+    </button>
+  </div>
+
+  <div class="hint" id="hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 16v-4"/>
+      <path d="M12 8h.01"/>
+    </svg>
+    <span>Ketuk logo 5× untuk akses admin</span>
+  </div>
+  <div class="dots" id="dots" aria-hidden="true">
+    <span class="d"></span>
+    <span class="d"></span>
+    <span class="d"></span>
+    <span class="d"></span>
+    <span class="d"></span>
+  </div>
+</div>
+
+<!-- ============================= REDIRECT OVERLAY ============================= -->
+<div class="redirect-overlay" id="redirectOverlay" role="alert" aria-live="assertive">
+  <div class="redirect-inner">
+    <div class="redirect-spinner" aria-hidden="true"></div>
+    <div class="redirect-text">Mengalihkan ke</div>
+    <div class="redirect-target" id="redirectTarget">—</div>
+  </div>
+</div>
+
+<!-- Watermark -->
+<div class="watermark" aria-hidden="true">
+  <span class="dot"></span>
+  <span>Secure Portal</span>
+</div>
+
+<noscript>
+  <div style="position:fixed;inset:0;display:grid;place-items:center;background:#050810;color:#fff;font-family:system-ui;padding:24px;text-align:center;z-index:9999;">
+    <div>
+      <h2 style="margin-bottom:12px;">JavaScript Diperlukan</h2>
+      <p style="opacity:0.7;font-size:14px;">Portal ini membutuhkan JavaScript. Aktifkan JavaScript di browser Anda lalu muat ulang halaman.</p>
+    </div>
+  </div>
+</noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     KONFIGURASI
+     ============================================================ */
+  const USER_URL  = 'https://absensi-formula-sman1mojosari.base44.app/user';
+  const ADMIN_URL = 'https://absensi-formula-sman1mojosari.base44.app/admin';
+  const LOADING_DURATION = 10000;
+  const CLICKS_FOR_ADMIN = 5;
+  const REDIRECT_DELAY   = 700;
+
+  /* ============================================================
+     REFERENSI DOM
+     ============================================================ */
+  const logsEl        = document.getElementById('logs');
+  const progressBar   = document.getElementById('progressBar');
+  const progressRole  = document.getElementById('progressRole');
+  const progressPct   = document.getElementById('progressPct');
+  const progressLabel = document.getElementById('progressLabel');
+  const loader        = document.getElementById('loader');
+  const skipHint      = document.getElementById('skipHint');
+  const login         = document.getElementById('login');
+  const logoWrap      = document.getElementById('logoWrap');
+  const ping          = document.getElementById('ping');
+  const hint          = document.getElementById('hint');
+  const hintSpan      = hint.querySelector('span');
+  const dots          = document.querySelectorAll('#dots .d');
+  const redirectOverlay = document.getElementById('redirectOverlay');
+  const redirectTarget  = document.getElementById('redirectTarget');
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  let progress        = 0;
+  let progressTimer   = null;
+  let redirecting     = false;
+  let loadingDone     = false;
+  let clickCount      = 0;
+  let clickTimer      = null;
+
+  /* ============================================================
+     UTIL
+     ============================================================ */
+  const pad = (n) => String(n).padStart(2, '0');
+  const fmtTime = () => {
+    const d = new Date();
+    return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  };
+
+  const markSymbol = { ok: '✓', info: '›', warn: '!', dim: '·' };
+
+  /* ============================================================
+     LOG
+     ============================================================ */
+  const appendLog = (mark, html) => {
+    if (!logsEl) return;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML =
+      '<span class="log-time">' + fmtTime() + '</span>' +
+      '<span class="log-mark ' + mark + '">' + (markSymbol[mark] || '·') + '</span>' +
+      '<span class="log-text">' + html + '</span>';
+    logsEl.appendChild(line);
+
+    // Jaga hanya 14 baris terakhir
+    while (logsEl.children.length > 14) {
+      logsEl.removeChild(logsEl.firstChild);
+    }
+    // Auto scroll ke bawah
+    logsEl.scrollTop = logsEl.scrollHeight;
+  };
+
+  /* ============================================================
+     PROGRESS
+     ============================================================ */
+  const setProgress = (value) => {
+    const v = Math.max(0, Math.min(100, Math.round(value)));
+    if (progressBar) progressBar.style.width = v + '%';
+    if (progressPct)  progressPct.textContent = v + '%';
+    if (progressRole) progressRole.setAttribute('aria-valuenow', String(v));
+    return v;
+  };
+
+  const setProgressLabel = (text) => {
+    if (progressLabel) progressLabel.textContent = text;
+  };
+
+  const startProgress = () => {
+    if (progressTimer !== null) return;
+    progressTimer = window.setInterval(() => {
+      const step = progress < 60 ? 2 : progress < 85 ? 1.2 : 0.5;
+      progress = Math.min(100, progress + step);
+      setProgress(progress);
+
+      if (progress < 30)       setProgressLabel('Menyiapkan sistem...');
+      else if (progress < 60)  setProgressLabel('Memuat modul...');
+      else if (progress < 85)  setProgressLabel('Menghubungkan...');
+      else if (progress < 100) setProgressLabel('Hampir selesai...');
+      else                     setProgressLabel('Selesai!');
+
+      if (progress >= 100) stopProgress();
+    }, 100);
+  };
+
+  const stopProgress = () => {
+    if (progressTimer !== null) {
+      clearInterval(progressTimer);
+      progressTimer = null;
+    }
+  };
+
+  const forceCompleteProgress = () => {
+    progress = 100;
+    setProgress(100);
+    setProgressLabel('Selesai!');
+    stopProgress();
+  };
+
+  /* ============================================================
+     LOG SCRIPT
+     ============================================================ */
+  const LOG_SCRIPT = [
+    { t: 100,  mark: 'info', text: 'Initializing <span class="accent">formula-portal</span> runtime...' },
+    { t: 450,  mark: 'dim',  text: 'Checking environment <span class="dim">[production]</span>' },
+    { t: 750,  mark: 'ok',   text: 'Environment loaded <span class="green">✓</span>' },
+
+    { t: 1100, mark: 'info', text: 'Fetching configuration <span class="accent">config.json</span>' },
+    { t: 1500, mark: 'dim',  text: '&nbsp;&nbsp;└─ reading <span class="accent">/secure/config</span>' },
+    { t: 1850, mark: 'ok',   text: 'Configuration ready <span class="green">✓</span>' },
+
+    { t: 2200, mark: 'info', text: 'Verifying API endpoints...' },
+    { t: 2550, mark: 'dim',  text: '&nbsp;&nbsp;├─ GET <span class="accent">/api/user</span> <span class="green">200 OK</span>' },
+    { t: 2850, mark: 'dim',  text: '&nbsp;&nbsp;├─ GET <span class="accent">/api/admin</span> <span class="green">200 OK</span>' },
+    { t: 3150, mark: 'dim',  text: '&nbsp;&nbsp;└─ GET <span class="accent">/api/auth</span> <span class="green">200 OK</span>' },
+    { t: 3450, mark: 'ok',   text: 'All endpoints reachable <span class="green">✓</span>' },
+
+    { t: 3800, mark: 'info', text: 'Loading security modules...' },
+    { t: 4100, mark: 'dim',  text: '&nbsp;&nbsp;├─ TLS handshake <span class="green">secure</span>' },
+    { t: 4400, mark: 'dim',  text: '&nbsp;&nbsp;├─ Session token <span class="green">valid</span>' },
+    { t: 4700, mark: 'dim',  text: '&nbsp;&nbsp;└─ Device fingerprint <span class="green">synced</span>' },
+
+    { t: 5100, mark: 'info', text: 'Building user interface...' },
+    { t: 5450, mark: 'dim',  text: '&nbsp;&nbsp;└─ <span class="accent">assets</span> compiled in <span class="green">124ms</span>' },
+
+    { t: 5800, mark: 'info', text: 'Connecting to database...' },
+    { t: 6150, mark: 'dim',  text: '&nbsp;&nbsp;├─ Pool size <span class="accent">10</span>' },
+    { t: 6450, mark: 'dim',  text: '&nbsp;&nbsp;└─ Latency <span class="green">32ms</span>' },
+    { t: 6750, mark: 'ok',   text: 'Database connection <span class="green">established</span>' },
+
+    { t: 7100, mark: 'info', text: 'Syncing attendance records...' },
+    { t: 7450, mark: 'dim',  text: '&nbsp;&nbsp;└─ <span class="accent">ready</span> for realtime updates' },
+
+    { t: 7800, mark: 'warn', text: 'Warming up cache <span class="accent">[████████░░] 80%</span>' },
+    { t: 8200, mark: 'warn', text: 'Warming up cache <span class="accent">[██████████] 100%</span>' },
+
+    { t: 8550, mark: 'ok',   text: 'Cache warmed <span class="green">✓</span>' },
+
+    { t: 8900, mark: 'info', text: 'Running final checks...' },
+    { t: 9200, mark: 'dim',  text: '&nbsp;&nbsp;└─ All systems operational' },
+
+    { t: 9550, mark: 'ok',   text: '<span class="green">✔ Portal siap. Selamat datang!</span>' }
+  ];
+
+  let logTimers = [];
+
+  const runLogScript = () => {
+    LOG_SCRIPT.forEach((entry) => {
+      const id = window.setTimeout(() => appendLog(entry.mark, entry.text), entry.t);
+      logTimers.push(id);
+    });
+  };
+
+  const clearLogTimers = () => {
+    logTimers.forEach(clearTimeout);
+    logTimers = [];
+  };
+
+  /* ============================================================
+     REDIRECT
+     ============================================================ */
+  const goTo = (url) => {
+    if (redirecting) return;
+    redirecting = true;
+
+    if (redirectTarget) redirectTarget.textContent = url;
+    if (redirectOverlay) redirectOverlay.classList.add('show');
+
+    // Disable tombol & logo agar tidak trigger ganda
+    const btnUser = document.getElementById('btnUser');
+    if (btnUser) btnUser.disabled = true;
+
+    window.setTimeout(() => {
+      window.location.href = url;
+    }, REDIRECT_DELAY);
+  };
+
+  /* ============================================================
+     TRANSISI KE LOGIN
+     ============================================================ */
+  const showLogin = () => {
+    if (loadingDone) return;
+    loadingDone = true;
+
+    forceCompleteProgress();
+    if (skipHint) skipHint.style.opacity = '0';
+    if (loader)   loader.classList.add('hide');
+
+    window.setTimeout(() => {
+      if (loader) {
+        loader.style.display = 'none';
+        loader.setAttribute('aria-hidden', 'true');
+      }
+      if (login) {
+        login.classList.add('show');
+        login.setAttribute('aria-hidden', 'false');
+      }
+    }, 420);
+  };
+
+  const skipIntro = () => {
+    if (loadingDone || redirecting) return;
+    clearLogTimers();
+    showLogin();
+  };
+
+  /* ============================================================
+     MULAI
+     ============================================================ */
+  const boot = () => {
+    startProgress();
+    runLogScript();
+
+    window.setTimeout(() => {
+      // Delay kecil setelah log terakhir agar sempat terlihat
+      window.setTimeout(showLogin, 800);
+    }, LOADING_DURATION);
+
+    // Skip intro via Enter / Space
+    document.addEventListener('keydown', (e) => {
+      if (!loadingDone && (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape')) {
+        // Hanya skip jika fokus bukan di tombol (cegah konflik)
+        const tag = document.activeElement ? document.activeElement.tagName : '';
+        if (tag !== 'BUTTON' && tag !== 'A') {
+          e.preventDefault();
+          skipIntro();
+        }
+      }
+    });
+
+    // Skip intro via klik di area loader
+    if (loader) {
+      loader.addEventListener('click', skipIntro);
+      loader.style.cursor = 'pointer';
+    }
+  };
+
+  /* ============================================================
+     LOGO: 5× KLIK → ADMIN
+     ============================================================ */
+  const resetClicks = () => {
+    clickCount = 0;
+    dots.forEach((d) => d.classList.remove('on'));
+    if (hint) hint.classList.remove('active');
+    if (hintSpan) hintSpan.textContent = 'Ketuk logo 5× untuk akses admin';
+  };
+
+  const handleLogoClick = () => {
+    if (redirecting) return;
+
+    // Ping animation
+    if (ping) {
+      ping.classList.remove('pulse');
+      void ping.offsetWidth; // reflow
+      ping.classList.add('pulse');
+    }
+
+    // Haptic feedback
+    if (navigator.vibrate) {
+      try { navigator.vibrate(30); } catch (_) { /* noop */ }
+    }
+
+    clickCount++;
+    const sisa = CLICKS_FOR_ADMIN - clickCount;
+
+    dots.forEach((d, i) => d.classList.toggle('on', i < clickCount));
+
+    if (hint) hint.classList.add('active');
+    if (hintSpan) {
+      hintSpan.textContent = sisa > 0
+        ? 'Ketuk ' + sisa + '× lagi untuk admin...'
+        : 'Membuka akses admin...';
+    }
+
+    clearTimeout(clickTimer);
+    if (sisa > 0) {
+      clickTimer = window.setTimeout(resetClicks, 2000);
+    }
+
+    if (clickCount >= CLICKS_FOR_ADMIN) {
+      clearTimeout(clickTimer);
+      window.setTimeout(() => goTo(ADMIN_URL), 280);
+    }
+  };
+
+  if (logoWrap) {
+    logoWrap.addEventListener('click', handleLogoClick);
+    logoWrap.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleLogoClick();
+      }
+    });
+  }
+
+  /* ============================================================
+     TOMBOL LOGIN ANGGOTA
+     ============================================================ */
+  const btnUser = document.getElementById('btnUser');
+  if (btnUser) {
+    btnUser.addEventListener('click', () => goTo(USER_URL));
+  }
+
+  /* ============================================================
+     SKIP VIA QUERY PARAMETER (?role=admin / ?role=user)
+     ============================================================ */
+  let params;
+  try {
+    params = new URLSearchParams(window.location.search);
+  } catch (_) {
+    params = null;
+  }
+  const role = params ? params.get('role') : null;
+
+  if (role === 'admin') {
+    // Langsung skip intro & redirect
+    clearLogTimers();
+    forceCompleteProgress();
+    window.setTimeout(() => goTo(ADMIN_URL), 200);
+  } else if (role === 'user') {
+    clearLogTimers();
+    forceCompleteProgress();
+    window.setTimeout(() => goTo(USER_URL), 200);
+  } else {
+    boot();
+  }
+
+  /* ============================================================
+     JAGA-JAGA: jika ada error runtime, tetap tampilkan login
+     ============================================================ */
+  window.addEventListener('error', () => {
+    if (!loadingDone && !redirecting) {
+      try { showLogin(); } catch (_) { /* noop */ }
+    }
+  });
+
+  // Safety net: jika setelah 15 detik loader masih "nyangkut", paksa login
+  window.setTimeout(() => {
+    if (!loadingDone && !redirecting) showLogin();
+  }, LOADING_DURATION + 5000);
+
+  /* ============================================================
+     CLEANUP pada unload (best practice, hindari timer menggantung)
+     ============================================================ */
+  window.addEventListener('beforeunload', () => {
+    stopProgress();
+    clearLogTimers();
+    clearTimeout(clickTimer);
+  });
+
+})();
+</script>
+
+</body>
+</html>
